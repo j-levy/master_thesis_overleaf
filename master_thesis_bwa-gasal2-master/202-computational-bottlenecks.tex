@@ -86,7 +86,7 @@ GASAL2 went under an important structure rework at the beginning of this thesis 
 	\item \verb|gasal_kernels.h|: contains all CUDA kernels, duplicated
 \end{itemize}
 
-Although this may seem as an easy way to split the code, it grew up to the point where it became hardly manageable. This included an important amount of duplicated and cluttered code, along with deprecated functions. The rewrite included separating the different parts of the code in distinct files, adding interfaces for structure filling, and a class to  handle all parameters in an centralized way.
+Although this may seem as an easy way to split the code, it grew up to the point where it became hardly manageable. The rewrite included separating the different parts of the code in distinct files, adding interfaces for structure filling, and a class to  handle all parameters in an centralized way.
 
 In addition, a shift to C++ has been operated to take advantage of C++ templates: they allow to produce different versions of a given function at compilation time. This will me more discussed on chapter \ref{chap:implementation}.
 
