@@ -1,0 +1,42 @@
+
+
+In this thesis, we addressed the challenge of accelerating time consuming genomics algorithms to make them more accessible for application in the field. The thesis specifically focuses on BWA as one of the most widely used DNA alignment programs. 
+
+Below are the research questions we defined in the thesis, and the answers we can provide.
+
+\begin{itemize}
+	\item How can we accelerate DNA alignment in an already existing program?
+\end{itemize}	
+
+We selected a widely used DNA aligner, BWA, as a base to accelerate a part of the alignment. Extension, in the "seed-extension" process, can be run in a parallel fashion on a dedicated piece of hardware, the GPU. We integrated the library GASAL2 in BWA to realise the acceleration. Still, we could not directly compute extension as BWA did, since left and right parts were computed one after the other, and starting with the previous total score (so, first the chain score to compute the left part, then the score from the left alignment for the right part). Instead, we compute both parts at the same time only using the chain score as starting score.
+
+To produce a working piece of software, we had to implement multiple improvements in GASAL2. Of course, we had to create a dedicated kernel for extension, copying BWA behaviour that follows the Smith-Waterman algorithm, but can start with any given starting score. But we also needed to implement an extensible memory structure for GASAL2 to adapt to an unknown number of alignment with unpredictable lengths for each of them. Finally, we instrumented both the new version bwa-gasal2 and BWA to be able to log their execution time and compare them. 
+
+Additionally, the demonstrator from which we started, gase-gasal, has been ported to support C++ compilation to be compatible with GASAL2 rewriting, that features templates for generic functions and a class for parameters.
+
+\begin{itemize}
+	\item How much speed-up can we get from GPU acceleration?
+\end{itemize}
+
+We ran our solution on two data sets, with sequences of 150 and 250 bases long, named SRR150 and SRR250 respectively. Depending on the data, on BWA, extension takes between 25\% and 33\% of the total time. This means that, depending on the situation, we can reach a theoretical 1.33$\times$ and 1.50$\times$ speed-up.
+
+We saw that on our test machine, parallel execution alone can only bring a moderate acceleration. On 12 threads on SRR150, we reach 1.21$\times$ speed-up in this case. But when enabling hidden-time execution with two GPU streams, we can get a 1.28$\times$ speed-up, which gets closer to the theoretical maximum of 1.33$\times$. This is all the more visible with data set SRR250 where the speed-up jumps from 1.12$\times$ to 1.28$\times$. So we have a very visible acceleration, although not reaching the theoretical amount. 
+
+There are various reasons explaining this difference. First, the CPU has to wait to get the final result of a given pack of sequences (it cannot start the next pack right away). Moreover, some overhead is introduced when filling the data structure in GASAL2 on the host side, before copying them on the device.
+
+\begin{itemize}
+	\item How close can the results with a different computing method be to the original software?
+\end{itemize}
+
+Since the output is text-based, we compared them by logging them to text and using the \verb|diff| UNIX utility. For each sequence, the main alignment is reported, along with secondary scores that are not always listed in the same order, and can slightly differ because of the seed-only paradigm.
+
+When comparing the complete results from the SRR150 data set, we found a 11.23\% difference. This is a higher bound that includes non similar secondary score order. This information is usually moderately important when aligning sequences. This is why we also compared only using the main alignment. In this case, the difference drops to 0.23\%, so the two outputs are extremely similar. We concluded that our solution produces acceptable results.
+
+\begin{itemize}
+	\item How to ensure that the GPU resources are well used, while leaving more space if needed for future evolution?
+\end{itemize}
+
+A GPU is well used when its computing resources have a high occupancy rate. Although a single kernel execution from GASAL2 has a low occupation (between 8\% to 15\%), instantiating multiple CPU threads to launch more kernels at the same time allows us to multiply this occupancy in a direct fashion. This way, we can reach 85\% to 95\% occupancy, which is a good use of resources.
+
+On the contrary, a sane use of GPU VRAM would be to not use more memory than what is necessary. Being frugal in memory can be useful if we want to align longer sequences, as these take a lot of space. Also, it can prevent out-of-memory errors if other parts were accelerated, or simply it could allow the program to run on a moderately-sized accelerator. To this extent, we used extensible memory structures to store the DNA strings, with a linked list structure with elements growing in size. This allows to allocate more memory whenever needed, and since the linked list is re-used, we try to keep the number of memory allocations to the minimum. With this, we could use around 20\% of the total memory of our accelerator for data set SRR150, or around 30\% for SRR250. The acceleration can still be used for mid-length sequences (probably 300 to 600 bases), but it would not scale well for long reads from modern aligners (7000 bases and up).
+

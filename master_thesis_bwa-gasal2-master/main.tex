@@ -1,0 +1,149 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{biblatex}
+\bibliography{database} % or
+% \addbibresource{<database>.<extension>}
+
+%// DON'T FORGET TO RUN BIBER ON database.bib !!!
+
+\usepackage{listingsutf8}
+\usepackage[cache=false]{minted}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{array}
+
+% Note: these commands allow to write "commits" easily and in a readable manner. For final delivery, all you need it to remove the internals of the macro, so that all "commits" will be replaced by blanks.
+\definecolor{Brown}{rgb}{0.4,0.1,0.2}
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Green}{rgb}{0,1,0}
+
+\newcommand{\commitalt}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Red}{\textcolor{white}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Red}{\textcolor{white}{#3}}}\end{minipage}}
+
+\newcommand{\commit}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Green}{\textcolor{black}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Green}{\textcolor{black}{#3}}}\end{minipage}}
+
+\newcommand{\commitread}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Brown}{\textcolor{white}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Brown}{\textcolor{white}{#3}}}\end{minipage}}
+
+
+\newcommand{\warn}[1]{{\huge \color{red} \bfseries {#1} }}
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+%\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
+%\newcolumntype{L}[1]{>{\raggedleft\arraybackslash}m{#1}}
+%\newcolumntype{R}[1]{>{\raggedright\arraybackslash}m{#1}}
+
+\author{Jonathan LEVY}
+\title{Master thesis \\ Acceleration of Seed Extension for BWA-MEM DNA Alignment Using GPUs}
+\begin{document}
+	\maketitle
+	
+	\section*{Abstract}
+	\input{00-abstract}
+	
+	\tableofcontents
+	
+	\chapter{Introduction}
+	\label{chap:intro}
+	\input{000-introduction}
+	
+		\section{Context}
+		\input{001-general-considerations}
+		
+		\section{Problem definition}
+		\input{002-problem-definition}
+		
+		\section{The alignment problem}
+		\input{003-alignment-problem}
+	
+		\section{Thesis overview}
+		\input{004-thesis-overview}
+		
+	\chapter{Background}
+	\label{chap:background}
+		\section{DNA alignment}
+		\input{101-background}
+		
+		\section{Seed-extension}
+		\input{102-existing-work}
+		
+		\section{Alignment on GPU}
+		\input{103-gpu-acceleration}
+		
+		\section{Research questions}
+		\input{003-research-questions}
+		
+	\chapter{Accelerator design}
+	\label{chap:accel}
+		\input{200-accelerator-design}
+		
+		\section{Shortcommings of BWA}
+		\input{202-computational-bottlenecks} %% profiling and stuff
+		
+		\section{GASAL2 and the extension kernel}
+		\input{201-gasal2-and-kernel}	
+		
+		\section{Proposed CUDA kernel}
+		\input{203-proposed-kernel}
+	
+	\chapter{Implementation}
+	\label{chap:implementation}
+	\input{300-implementation}
+		
+		\section{C++ Kernel templates}
+		\input{301-kernel-template-cpp}
+	
+		\section{Kernel implementation}
+		\input{301-kernel-implementation}
+		
+		\section{Library integration}
+		\input{302-library-integration}
+		
+		\section{Memory management}
+		\input{304-memory-management}
+	
+	\chapter{Measurements}
+	\label{chap:measurements}
+	\input{400-measurements}
+	
+		\section{Experimental setup}
+		\input{401-environment-data-set}
+		
+		\section{Performance measurement}
+		\input{402-performance-measurement}
+		
+		\section{Correctness measurement}
+		\input{403-correctness}
+		
+		\section{Memory use measurement}
+		\input{404-memory-use}
+	
+	\chapter{Conclusions and recommendations}
+	\label{chap:ccl}
+	\input{500-pre-ccl}
+	
+		\section{Conclusion}
+		\input{501-ccl}
+		
+		\section{Future work}		
+		\input{502-future}
+
+		\section{Closing and thanks}
+		\input{503-closing}
+	
+	\printbibliography
+	
+	
+\end{document}

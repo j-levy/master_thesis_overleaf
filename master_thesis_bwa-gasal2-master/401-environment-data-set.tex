@@ -1,0 +1,67 @@
+
+
+First let's review the conditions in which we run our measurements.
+
+\subsection{Environment definition}
+
+The machine we used for developing the program on is the same one we used for our measurements. We reported hardware references on table \ref{tbl:hwspecs} and software specifications on table \ref{tbl:swspecs}.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline 
+		\textbf{Hardware} & \textbf{Reference} \\ 
+		\hline 
+		CPU & 2 * Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz \\ 
+		\hline 
+		RAM & 32 GB DDR3 \\ 
+		\hline 
+		GPU & NVIDIA GK110BGL - Tesla K40c \\ 
+		\hline 
+		VRAM & 12 GB GDDR5\\
+		\hline
+	\end{tabular} 
+	\caption{Hardware specifications}
+	\label{tbl:hwspecs}
+\end{table}
+
+	\bigskip
+	
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|C{0.2\textwidth}|C{0.8\textwidth}|}
+		\hline 
+		\textbf{Software} & \textbf{Reference} \\ 
+		\hline 
+		Operating System & Red Had Enterprise Linux 7 \\ 
+		\hline 
+		Linux kernel &  3.10.0-957.5.1.el7.x86\_64 \\ 
+		\hline 
+		C compiler & g++, GCC version 4.8.5 20150623 \\ 
+		\hline 
+		CUDA version & 10.1.105 \\ 
+		\hline 
+		C compiler options & \verb|-g -Wall -Wno-unused-function -O2 -msse4.2 -std=c++11 -fpermissive| \\ 
+		\hline 
+		NVCC compiler options & \verb|-c -g -O3 -std=c++11 -Xcompiler -Wall,-DMAX_SEQ_LEN=\$(MAX_SEQ\_LEN),-DN_CODE=\$(N_CODE) -Xptxas -Werror -lineinfo --ptxas-options=-v --default-stream per-thread| \\ 
+		\hline 
+		
+		\end{tabular} 
+\caption{Software specifications}
+\label{tbl:swspecs}
+\end{table}
+
+We applied an optimization level of -O2 for the GCC compiler since we noted that it gave significantly faster execution than -O0 and -O1, and -O3 made no difference in speed with -O2. For NVCC, we kept the -O3 optimization level that was originally used in all GASAL2 papers\cite{Ahmed:gasal}.
+
+The line "NVCC compiler options" has two particular defines passed with -D. \verb|MAX\_SEQ\_LEN| corresponds the maximum size of the sequence for the extension kernel. As we have seen on figure \ref{fig:visualization-aid-tile}, we have to store the score of a whole row (in yellow on the figure). This size is defined at compilation time to avoid dynamic memory allocation inside the kernel, which makes it noticeably faster. \verb|N_CODE| defines the value used for the unknown base "N", since each program can use its own. For example, the test program provided with GASAL2 registers the bases with their ASCII values, so the N code is \verb|0x4E|; but BWA codes A, C, T, G, and N with integer values from 0 to 4, the N code being 4.
+
+All alignments are run with 1 and 2 streams, and with 1, 2, 4, 6, 8, 10, and 12 threads. We will observe how hidden-time execution provides faster results when using 2 streams. In addition, we run the program with only one stream to force it to wait for its completion before re-filling it: this allows to measure the actual kernel time, since the CPU is actively waiting for it. 
+
+\subsection{Data sets}
+
+For the alignment, we use two data sets of sequences that we align against a given genome. Each data set is constituted of two files. The first file contains the sequences, and the second file their reverse-complement. 
+
+Data set \#1 called "SRR150" is made of 150-base long DNA strings. Each file has 5.2 million sequences. These are the typical length that a DNA sequencer from the previous generation can produce (more modern ones can output much longer strings). Data set \#2, that we called "SRR250" has, as its name suggests, DNA string with 250 bases each. This pair of files contains 8.3 million sequences in each file.
+
+The reference we used is the Genome Reference Consortium Human Build 37 (GRCh37), also named "hg19"\cite{ncbi:hg19}. It is the genome of a male human being (with X and Y chromosomes) sequenced in 2009. This whole genome weighs around 3.2GB in its plain text version. Before running the alignment of the data sets against it, the genome has been processed and indexed with BWA to produce its Burrows-Wheeler transform, which weighs approximately the same weigh.
+
