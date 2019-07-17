@@ -3,7 +3,7 @@ We will now review of the given architecture of GASAL2 at the beginning of this 
 
 \subsection{Typical workflow of GASAL2}
 
-Let's describe the workflow usually followed when using GASAL2. Figure~\ref{fig:dataflow} shows this flow in a graph. This flow can be instantiated multiple times from each CPU threads.
+We will now describe the workflow usually followed when using GASAL2. Figure~\ref{fig:dataflow} shows this flow in a graph. This flow can be instantiated multiple times from each CPU threads.
 
 The first step is to fill the parameters used for alignment: match and mismatch scores, maximum number of sequences and maximum sizes. Then, the GPU and host storages are initialized with this given size. This step fills up the VRAM by quite a important amount because of how large the data set is. 
 
@@ -88,7 +88,7 @@ The original extension function has a BLAST-like behaviour. It starts from a pai
 	\item it computes a local alignment with the start score equal to the left score previously computed (which includes the seed score).
 \end{itemize}
 
-In our case, this approach is unpractical because one would like to compute both sides in parallel to maximize GPU use. In this fashion, we do not have other choices than making both extensions (left and right) start with a score equal to the seed score, which could make a small difference in the final result. We expected this error between the regular BLAST-like computation and our slightly different approach to be small enough to consider this approach valid. We effectively measured it after implementation, with results shown in chapter~\ref{chap:measurements}. We reached the conclusion that the difference was effectively very small and that calculating both sides at the same time only using the seed score is an acceptable way to solve this problem. We call that paradigm the "seed-only" method.
+In our case, this approach is unpractical because one would like to compute both sides in parallel to maximize GPU use. In this fashion, we do not have other choices than making both extensions (left and right) start with a score equal to the seed score, which could make a small difference in the final result. We expected this error between the regular BLAST-like computation and our slightly different approach to be small enough to consider this approach valid. We effectively measured it after implementation, with results shown in Chapter~\ref{chap:measurements}. We reached the conclusion that the difference was effectively very small and that calculating both sides at the same time only using the seed score is an acceptable way to solve this problem. We call that paradigm the "seed-only" method.
 
 Another problem comes from the rigidity of GASAL2 memory scheme. Originally, GASAL2 was not able to scale in memory and adapt if some sequences were longer than expected, resulting in a crash of the program. This is particularly problematic when integrating it in BWA, because the number of seeds is unknown in advance, so each batch in GASAL2 need to have a variable size; plus, left and right parts to align have an unpredictable length. 
 An extensible data structure should be implemented to tackle this issue with minimum overhead.
