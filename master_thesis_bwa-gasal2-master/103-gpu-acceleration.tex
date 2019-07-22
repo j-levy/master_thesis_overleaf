@@ -1,3 +1,5 @@
+To accelerate the computation, several approaches were tried. For example, Ahmed \emph{et al.} used a dedicated FPGA (\emph{Field Programmable Gate Array}) to accelerate the research with the FM-index and the extension~\cite{Ahmed:FPGA}. Another approach from Mashtaq \emph{et al.} consisted in streaming DNA sequences alignment tasks to a cluster with Apache Spark~\cite{Mushtaq:spark}. But these solutions require extra hardware and can be difficult to set up. We would like to propose a solution using common hardware found on computers, in particular, Graphics Processing Units, or GPUs.
+
 DNA computation can take advantage of the inner structure of a GPU to compute the alignment faster. First, we will quickly recap the current solutions at hand. Then a presentation of the GPU architecture and programming paradigm will show how this device work and how they are adapted for this work.
 
 \subsection{Parallel computing for DNA alignment}
@@ -9,10 +11,10 @@ It is possible to go even further with \emph{intra-sequence parallelisation}, th
 As for current solutions, a quick list of some of the existing software for DNA alignment will be presented. These tools are most often present as libraries, to be able to integrate them in bigger and more easy-to-use software.
 
 \begin{itemize}
-    \item \emph{SeqAn} is a C++ toolbox for DNA alignment. It features a lot of various tools, and implements its own C++ library for alignment. It runs on multiple CPU threads, and can rely on SIMD for moderate acceleration,
-    \item \emph{Basic Local Alignment Seach Tool} (\emph{BLAST}) searches for pairwise alignment with the seed-extension method,
-    \item \emph{Burrows-Wheeler Aligner} (\emph{BWA}) is a DNA aligner focused on speed relying on FM-index for seeding, with BLAST-like extension,
-    \item \emph{NVBIO} is a GPU-accelerated library written in CUDA, the dedicated language for general-purpose GPU computing on NVIDIA GPUs. It has a lot of features including banded dynamic programming, fast FM-index construction, and efficient data handling between CPU and GPU,
+    \item \emph{SeqAn}~\cite{Doring:seqan} is a C++ toolbox for DNA alignment. It features a lot of various tools, and implements its own C++ library for alignment. It runs on multiple CPU threads, and can rely on SIMD for moderate acceleration,
+    \item \emph{Basic Local Alignment Seach Tool} (\emph{BLAST})~\cite{Altschul:BLAST} searches for pairwise alignment with the seed-extension method,
+    \item \emph{Burrows-Wheeler Aligner} (\emph{BWA})~\cite{li:bwa} is a DNA aligner focused on speed relying on FM-index for seeding, with BLAST-like extension,
+    \item \emph{NVBIO}~\cite{nvidia:nvbio} is a GPU-accelerated library written in CUDA, the dedicated language for general-purpose GPU computing on NVIDIA GPUs. It has a lot of features including banded dynamic programming, fast FM-index construction, and efficient data handling between CPU and GPU,
     \item \emph{GASAL2} is also a CUDA-written library for DNA alignment, developed with speed in mind. Despite its relatively small number of features, it runs all compute-intensive parts on GPU for maximum speed-up.
 \end{itemize}
 
