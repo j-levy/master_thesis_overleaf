@@ -18,7 +18,7 @@ Because of memory constraints, the whole matrix is not stored in memory. Instead
 	\label{fig:visualisation-aid-tile}
 \end{figure}
 
-The algorithm change as shown in ~\cite{Ahmed:gasal}.
+%The algorithm changes as reported in paper ~\cite{Ahmed:gasal}.
 
 Finally, we introduced again some computing optimisation that we disabled in the second version of the kernel, in particular, z-dropoff. This optimisation allows to skip the calculation of some cells of the matrix provided the score drops below a certain threshold. When this happens, it usually means that the alignment will not improve because the difference between the two sequences grew too big, so it is usually better to stop computing altogether instead of wasting time trying to align two sequences that are visibly very different.
 
