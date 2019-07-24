@@ -102,7 +102,7 @@ The sequences are filled by a dedicated function from GASAL2 that takes care of 
 		\State $total\_length \leftarrow padding\_length + seq\_length$
 		
 		\If{$e$ is the last element \textbf{and} $total\_length \geqslant e\rhd page\_size - e\rhd data\_size$}
-			\State Create new\rhd element twice as big
+			\State Create new element twice as big
 			\State Append it to the last element $e$
 			\State Select last element (newly added) of the linked list, define it as $e$
 		\EndIf

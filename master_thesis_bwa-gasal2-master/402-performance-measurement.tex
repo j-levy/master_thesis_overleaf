@@ -81,7 +81,7 @@ We run the same measurements on data set SRR250. Its sequences are longer, so th
 
 For this data set, the extension time is taking approximately 33\% of the total time, so we would expect a bigger speed-up, with the theoretical maximum being 1.5$\times$. However, it is not what we observe, even in the best case with 2 streams: on a single thread, we can effectively reach a speed-up of 1.41$\times$, which gets somewhat close to the theoretical maximum, but with 12 threads, we reach only 1.29$\times$. This is still a valuable improvement over the original version, and in all cases, hidden-time execution gives a substantial boost in performance. When comparing the single stream version to its 2-stream counterpart, we note that using 2 streams definitely helps shrinking the execution time.
 
-We will now examine the kernel times and speed-up, on Figure~\ref{fig:kernel-exec-time-srr250} and~\ref{fig:kernel-exec-speed-up-srr250} respectively.
+We will now examine the kernel times and speed-up, on Figure~\ref{fig:kernel-exec-time-srr250} and Figure~\ref{fig:kernel-exec-speed-up-srr250} respectively.
 
 
 \begin{figure}[p]

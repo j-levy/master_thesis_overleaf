@@ -1,0 +1,354 @@
+\documentclass[11pt,twoside]{ce}
+
+\usepackage{graphicx}
+\usepackage{wrapfig}
+%\usepackage{color}
+%\usepackage{acronym}
+\usepackage{newclude}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{mciteplus}     % TD needed for bibliography
+\usepackage[hyphens]{url}
+%\def\UrlBreaks{\do\/\do-}
+\usepackage[breaklinks]{hyperref}  % TD pagebackref creates links at the end of references in the bib, so that a reader can quickly go back to the page the reference was referenced
+%\usepackage{listings}      % TD for code listings
+%\usepackage{amsmath}       % TD column vectors
+\usepackage{subfiles}      % TD subfiles
+\usepackage{eso-pic}       % TD custom cover
+\usepackage{epstopdf}      % TD custom cover
+\usepackage{todonotes}     % TD todo notes
+\usepackage{ragged2e}      % TD format long url in references
+\definecolor{gray}{rgb}{0.1,0.1,0.1}  % TD custom cover
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+%\usepackage{caption}
+%\usepackage{subcaption}
+
+\usepackage[style=ieee]{biblatex}
+\bibliography{database}
+
+%// DON'T FORGET TO RUN BIBER ON database.bib !!!
+
+\usepackage{listingsutf8}
+\usepackage[cache=false]{minted}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{array}
+
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% usage: \fig{options}{fileName}{caption}{fig:label}
+
+% sed '/{/!s/denovo/de novo/g'   to replace 'denovo' with 'de novo', except is there is a { on the line
+
+% for every line with 'doi', replace the first " with $\url{, then replace the first " with }", and then replace the first $ with "
+% do not use these for url fields, they get a url automatically
+% sed '/doi/ { s|"|$\\url{| }' 
+% sed '/doi/ { s|"|}"| }' 
+% sed '/doi/ { s|\$|"| }'
+ 
+% add text to backrefs
+%\renewcommand*{\backref}[1]{}
+%\renewcommand*{\backrefalt}[4]{[{%
+%    \ifcase #1 Not cited.%
+%          \or Cited on page~#2%
+%          \else Cited on pages #2%
+%    \fi%
+%    }]}
+
+% allow custom style, see first entry in bib file
+%\makeatletter
+%\def\bstctlcite{\@ifnextchar[{\@bstctlcite}{\@bstctlcite[@auxout]}}
+%\def\@bstctlcite[#1]#2{\@bsphack
+%  \@for\@citeb:=#2\do{%
+%    \edef\@citeb{\expandafter\@firstofone\@citeb}%
+%    \if@filesw\immediate\write\csname #1\endcsname{\string\citation{\@citeb}}\fi}%
+%  \@esphack}
+%\makeatother
+%
+%\newcommand{\fig}[4]{%
+%\begin{figure}[h]
+%\includegraphics[#1]{\figPath #2}
+%\caption{#3}
+%\label{#4}
+%\end{figure}}
+%
+%\newcommand{\figC}[4]{%
+%\begin{figure}[h]
+%\centering
+%\fbox{
+%\includegraphics[#1]{\figPath #2}
+%}
+%\caption{#3}
+%\label{#4}
+%\end{figure}}
+%
+%\lstset{
+%	numbers = left,
+%	breaklines = true,
+%	tabsize = 3
+%}
+
+
+%-----------------------------------------------------------------------%
+%           Please enter your personal details !!!                      %
+%-----------------------------------------------------------------------%
+
+\newcommand{\TITLE}{Acceleration of Seed Extension for BWA-MEM DNA Alignment Using GPUs}
+\newcommand{\AUTHOR}{Jonathan Lévy}
+\newcommand{\country}{The Netherlands}
+\newcommand{\city}{Ede (Gld)}
+\newcommand{\NR}{CE-MS-\the\year-32} 
+\newcommand{\KEY}{}   % key words for your thesis
+\newcommand{\SUBTITLE}{}
+
+%-----------------------------------------------------------------------%
+%            Fixed Title page - Don't change any thing here             %
+%-----------------------------------------------------------------------%
+\newcommand{\DATE}{\today} 
+\newcommand{\LTYPE}{latex2e}
+\newcommand{\reffig}[1]{Figure~\ref{#1}}
+\newcommand{\reftab}[1]{Table~\ref{#1}}
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+
+%-----------------------------------------------------------------------%
+%  Enter the names of members in the committee,i.e. chair-person,       %
+%  advisors and other members. At this moment,                          %
+%  maximally 7 members signatures are supported. Be careful             %
+%  with the length of the abstract (should be about 15 lines ).         %
+%                                                                       %
+%  Use the following format to fill in the committee memebers           %
+%        " name, group, organization"
+%
+%     i   for example, Stephan Wong, CE, TU Delft                        %
+%-----------------------------------------------------------------------%
+\firstadvisor{Zaid Al-Ars, QCE, TU Delft}
+\chairperson{Mahroo Zandrahimi, QCE, TU Delft}
+\firstmember{Ryoichi Ishihara, QCE, TU Delft}
+\secondmember{Nauman Ahmed, QCE, TU Delft}
+
+
+%-----------------------------------------------------------------------%
+%            Fixed   - Don't change any thing here                      %
+%-----------------------------------------------------------------------%
+
+\begin{document}
+%\bstctlcite{IEEEexample:BSTcontrol}
+\newcommand{\main}{1}         % TD detect main or subfile
+
+\pagenumbering{roman}
+\pagestyle{plain}
+
+%\include{acronyms.tex}
+
+%-----------------------------------------------------------------------%
+%            Fixed cover page  - Don't change any thing here            %
+%-----------------------------------------------------------------------%
+\thispagestyle{empty}
+%\include{0_template/cover2}                                   % thesis cover
+\setcounter{page}{0} \cleardoublepage
+
+%-----------------------------------------------------------------------%
+%            Fixed Title page - Don't change any thing here             %
+%-----------------------------------------------------------------------%
+\thispagestyle{empty}
+\title{\TITLE}
+\subtitle{\SUBTITLE} \extitle{\EXTITLE}
+\author{\AUTHOR}
+\date{
+    \small \LAB \\
+    \small \DEP \\
+    \small \FAC \\
+    \small \INSTITUTE \\
+} \maketitle
+
+\setcounter{page}{0} \cleardoublepage
+
+%-----------------------------------------------------------------------%
+%       Front page includes a small abstract and signatures of          %
+%       advisor, supervisor and mentors                                 %
+%                                                                       % 
+%       Please fill in your dedication words                            %
+%-----------------------------------------------------------------------%
+\input{00-abstract}
+\cleardoublepage
+
+\dedicate{Dedicated to my family and friends}                                        % fill in your dedication words  
+
+\thankyou                                          % "Thankyou" page
+\tableofcontents                                   %  Table of contents
+
+%------------------------------------------------------------------------%
+%        List of Figures and Tables - don't change anything here         %
+%------------------------------------------------------------------------%
+%\clearsinglepage
+%\clearpage
+%\listoffigures
+%\addcontentsline{toc}{chapter}{List of Figures}
+
+%\clearsinglepage
+%\clearpage
+%\listoftables
+%\addcontentsline{toc}{chapter}{List of Tables}
+
+\clearpage
+%\input{../0_template/acronym}
+%\addcontentsline{toc}{chapter}{List of Acronyms}
+
+%-----------------------------------------------------------------------%
+%                     Include thesis acknowledgements                   %
+%-----------------------------------------------------------------------%
+\input{00-acknowledgements}                                    % inlcude acknowledgements page
+
+\addtocontents{toc}{\protect\addvspace{1cm}}
+\cleardoublepage
+
+\pagestyle{headings}
+\pagestyle{private}
+\pagenumbering{arabic}
+
+%-----------------------------------------------------------------------%
+%                     Include separate chapters                         %
+%                                                                       %
+%       1)  fill in the tex file of each chapter                        %
+%       2)  If more chapters, add more include commands                 %
+%-----------------------------------------------------------------------%
+
+%\input{1_introduction/index}
+%\input{2_background/index}
+%\input{3_concept/index}
+%\input{4_specification/index}
+%\input{5_experiments/index}
+%\input{6_conclusion/index}
+%\subfile{1_introduction/index}
+%\subfile{2_background/index}
+%\subfile{3_concept/index}
+%\subfile{4_specification/index}
+%\subfile{5_results/index}
+%\subfile{6_conclusion/index}
+
+
+\chapter{Introduction}
+\label{chap:intro}
+\input{000-introduction}
+
+\section{Context}
+\input{001-general-considerations}
+
+\section{DNA alignment, a time-consuming process}
+\input{002-problem-definition}
+
+\section{The alignment problem}
+\input{003-alignment-problem}
+
+\section{Thesis overview}
+\input{004-thesis-overview}
+
+\chapter{Background}
+\label{chap:background}
+\section{DNA alignment}
+\input{101-background}
+
+\section{Seed-extension}
+\input{102-existing-work}
+
+\section{Alignment on GPU}
+\input{103-gpu-acceleration}
+
+\section{Research questions}
+\input{003-research-questions}
+
+\chapter{Accelerator design}
+\label{chap:accel}
+\input{200-accelerator-design}
+
+\section{Shortcommings of BWA}
+\input{202-computational-bottlenecks} %% profiling and stuff
+
+\section{GASAL2 and the extension kernel}
+\input{201-gasal2-and-kernel}	
+
+\section{Proposed CUDA kernel}
+\input{203-proposed-kernel}
+
+\chapter{Implementation}
+\label{chap:implementation}
+\input{300-implementation}
+
+\section{C++ Kernel templates}
+\input{301-kernel-template-cpp}
+
+\section{Kernel implementation}
+\input{301-kernel-implementation}
+
+\section{Library integration}
+\input{302-library-integration}
+
+\section{Memory management}
+\input{304-memory-management}
+
+\chapter{Measurements}
+\label{chap:measurements}
+\input{400-measurements}
+
+\section{Experimental setup}
+\input{401-environment-data-set}
+
+\section{Performance measurement}
+\input{402-performance-measurement}
+
+\section{Correctness measurement}
+\input{403-correctness}
+
+\section{Memory use measurement}
+\input{404-memory-use}
+
+\chapter{Conclusions and recommendations}
+\label{chap:ccl}
+\input{500-pre-ccl}
+
+\section{Conclusion}
+\input{501-ccl}
+
+\section{Future work}		
+\input{502-future}
+
+%-----------------------------------------------------------------------%
+%             Use IEEE bibtex style instead of the one                  %
+%                   defined in the style file                           %
+%             fill in your thesis bib file                              %
+%-----------------------------------------------------------------------%
+\cleardoublepage
+%\bibliographystyle{IEEEtran}        % TD added M to suit mciteplus
+%\bibliographystyle{amsplain}
+%\bibliographystyle{plain}
+%\markboth{BIBLIOGRAPHY}{BIBLIOGRAPHY}
+%\bibliography{biblio,thispaper,tecs-nopreamble}       
+\RaggedRight
+%\bibliography{database}          % fill in your thesis bib file here
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
+%-----------------------------------------------------------------------%
+%                     Include thesis appendixes if you have             %
+%-----------------------------------------------------------------------%
+
+
+%\cleardoublepage
+%\markboth{LIST OF DEFINITIONS}{LIST OF DEFINITIONS}
+%\addcontentsline{toc}{chapter}{List of Definitions}
+%\include{appendix/dictionary}    
+
+\cleardoublepage
+
+%\appendix
+%\include{appendix/appendixA}                                       % fill in the tex file for thesis Appendixes
+
+\end{document}
