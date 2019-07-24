@@ -541,7 +541,7 @@
 %                         TITLE PAGE                                %
 %-------------------------------------------------------------------%
 \def\@REPTYPE{MASTER OF SCIENCE}
-\def\@MAJOR{COMPUTER ENGINEERING}
+\def\@MAJOR{EMBEDDED SYSTEMS}
 \def\@CITY{}
 \def\@COUNTRY{}
 
