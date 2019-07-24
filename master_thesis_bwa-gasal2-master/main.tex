@@ -1,4 +1,9 @@
 \documentclass[11pt,a4paper]{report}
+
+%\documentclass[whitelogo]{tudelft-report}
+%\usepackage{natbib}
+%\usepackage{changes}
+
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
@@ -46,12 +51,24 @@
 %\newcolumntype{R}[1]{>{\raggedright\arraybackslash}m{#1}}
 
 \author{Jonathan LEVY}
-\title{Master thesis \\ Acceleration of Seed Extension for BWA-MEM DNA Alignment Using GPUs}
+\title{Master thesis \\Acceleration of Seed Extension for BWA-MEM DNA Alignment Using GPUs}
+
 \begin{document}
+
+
 	\maketitle
 	
-	\section*{Abstract}
-	\input{00-abstract}
+	%\section*{Abstract}\\
+	\begin{abstract}
+		\input{00-abstract}
+	\end{abstract}
+
+	%\section*{Acknowledgements}
+	\renewcommand{\abstractname}{Acknowledgements}
+	\begin{abstract}
+		\input{00-acknowledgements}
+	\end{abstract}
+
 	
 	\tableofcontents
 	
@@ -139,9 +156,6 @@
 		
 		\section{Future work}		
 		\input{502-future}
-
-		\section{Closing and thanks}
-		\input{503-closing}
 	
 	\printbibliography
 

@@ -43,7 +43,7 @@ These similar fields have been omitted for clarity, and only reminded with the c
 	breaklines,
 	frame=single
 	]{C}
-	typedef struct {	
+typedef struct {	
 	uint8_t *host_unpacked_query_batch; // (string) the query sequences, butted together
 	uint8_t *host_unpacked_target_batch; // (string) the target sequences, butted together
 	uint32_t *host_query_batch_offsets; // array with the offsets to tell the sequences apart
@@ -68,8 +68,8 @@ These similar fields have been omitted for clarity, and only reminded with the c
 	uint32_t host_max_n_alns; // maximum number of sequences for the buffers on the host
 	cudaStream_t str; 
 	int is_free; // flag to know if the computation is being run (0) or if it is finished (1)
-	
-	} gasal_gpu_storage_t;
+
+} gasal_gpu_storage_t;
 	\end{minted}
 	\caption{the gasal\_gpu\_storage\_t data structure.}
 	\label{lst:gpu_storage}
