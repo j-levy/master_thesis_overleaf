@@ -5,7 +5,7 @@ GPU memory (VRAM) use is a delicate topic to assess, since it highly depends on 
 \begin{itemize}
 	\item the GPU, since the VRAM available may not be sufficient to saturate its computing resources,
 	\item the CPU, because how many threads we can instantiate directly impacts how much VRAM we will need,
-	\item the RAM, since the sequences also need to be loaded in RAM before being copied to the GPU (although this is rarely a limiting factor, since a given machine has far more RAM than its GPU has VRAM),
+	\item the RAM, since the sequences also need to be loaded in RAM before being copied to the GPU (although this is rarely a limiting factor, since a given machine usually has far more RAM than its GPU has VRAM),
 	\item and of course, the data set running.
 \end{itemize}
 
@@ -20,4 +20,4 @@ For this, we start bwa-gasal2 with a substantial low amount of memory, and let t
 	\label{fig:memory-use}
 \end{figure}
 
-On these examples, we need around 1570 MB for a data set with sequences of 150 bases, and 2730 MB for sequences 250 bases long. This shows that our solution will not properly scale with very long sequences, since we will quickly run out of memory for our GPU. Still it is decent for our short-length sequences, where we use less than 1/6th of our total available memory with our worst case scenario. In particular, this allows to use a cheaper accelerator if needed, and in our case, it leaves more memory to accelerate in the future another part of the calculation.
+On these examples, we need around 1570 MB for a data set with sequences of 150 bases, and 2730 MB for sequences 250 bases long. This shows that our solution will not properly scale with very long sequences, since we will probably run out of memory for our GPU. Still it is decent for our short-length sequences, where we use less than 1/6th of our total available memory with our worst case scenario. In particular, this allows to use a cheaper accelerator if needed, and in our case, it leaves more memory to accelerate in the future another part of the calculation.

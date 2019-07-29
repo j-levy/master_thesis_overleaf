@@ -22,7 +22,6 @@ For the sake of giving an idea of the time share, we ran the alignment of a data
 The GASAL2 library is a C++/CUDA library for DNA alignment computation. In the beginning of the project, GASAL2 was able to perform global, local and the hybrid semi-global alignment, with start position calculation. It features data compression on GPU: the goal is to quickly compress DNA strings directly in VRAM to fetch them faster when calculating the dynamic programming matrix.
 
 Here is the list of features of GASAL2 before this thesis:
-
 \begin{itemize}
 	\item Local, global, semi-global alignment run on GPU,
 	\item Operates on compressed data: there are 5 bases to describe, A, T, C, G and the unknown base N, hence needing a minimum of 3 bits to encore the base, but each based is stored on 4 bits to facilitate storing (more on this topic below)
@@ -30,7 +29,7 @@ Here is the list of features of GASAL2 before this thesis:
 	\item Capable to reverse and, or complement any sequence on the batch independently on the GPU.
 \end{itemize}
 
-GASAL2 works with batches of sequences to align. Here, we will present the original data structure of GASAL2 before the work presented in the thesis. It revolves around a single data structure called \verb|gasal_gpu_storage_t| with the following fields, commented, on listing~\ref{lst:gpu_storage}. All fields from line 2 to 13 have their counterpart on the GPU, named the same way without the \verb|host_| prefix in their name. Since the host and the device have distinct memories, data should be handed from the host side to the device before launching computation, then the results should be retrieved from the device when it is done.  
+GASAL2 works with batches of sequences to align. Here, we will present the original data structure of GASAL2 before the work presented in the thesis. It revolves around a single data structure called \verb|gasal_gpu_storage_t| with the following fields, commented, on Listing~\ref{lst:gpu_storage}. All fields from line 2 to 13 have their counterpart on the GPU, named the same way without the \verb|host_| prefix in their name. Since the host and the device have distinct memories, data should be handed from the host side to the device before launching computation, then the results should be retrieved from the device when it is done.  
 These similar fields have been omitted for clarity, and only reminded with the comment \verb|//[copies of the abovementioned field on the GPU]|.
 
 \begin{listing}
