@@ -24,7 +24,7 @@ Finally, we introduced again some computing optimisation that we initially disab
 
 With all of this implemented, the pseudocode for the kernel is shown in Algorithm~\ref{algo:kernel}. Some parts detailed in Algorithm~\ref{algo:local} are only summarised here for readability.
 \begin{algorithm}[h!]
-	\caption{Dynamic programming matrix computation algorithm}
+	\caption{ksw$\_$kernel algorithm}
 	\label{algo:kernel}
 	\begin{algorithmic}[1] % The number tells where the line numbering should start
 		\Procedure{Seed-extension kernel}{$query\_string$, $target\_string$, $query\_length$, $target\_length$, $initial\_score$, $zdrop$} \Comment{$TILE\_SIDE = 8$}
@@ -109,7 +109,7 @@ To verify the correctness of this implementation, a modified version of BWA-MEM 
 
 In a branch called \verb|no-zdrop-seedonly|, we introduced our seed-only method instead of the original BLAST-like behaviour. As the name suggests, we also disabled the z-dropoff when comparing the result for this branch, but we re-introduced it afterwards to check the implementation of the z-dropoff in GASAL2, and verified that they matched.
 
-The results are in the Sequence Alignment/Map (SAM) format, commonly used for DNA mapping. SAM is text-based, extensively documented~\cite{samtools:sam} and widespread among DNA-related programs. It is the default format output for BWA. Using \verb|diff| and other regular UNIX tools, we can compare the number of lines that differ between the reference program and a modified version. Knowing the original number of lines, we can derive a percentage of difference between the files, as shown on Listing~\ref{lst:diff}.
+The results are in the Sequence Alignment/Map (SAM) format, commonly used for DNA mapping. SAM is text-based, extensively documented~\cite{samtools:sam} and widespread among DNA-related programs. It is the default format output for BWA. Using \verb|diff|~\cite{misc:gnudiff} and other regular UNIX tools, we can compare the number of lines that differ between the reference program and a modified version. Knowing the original number of lines, we can derive a percentage of difference between the files, as shown on Listing~\ref{lst:diff}.
 
 \begin{listing}[ht]
 	\begin{minted}[

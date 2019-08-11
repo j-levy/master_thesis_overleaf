@@ -2,7 +2,7 @@
 
 In this thesis, we addressed the challenge of accelerating time consuming genomics algorithms to make them more accessible for application in the field. The thesis specifically focuses on BWA-MEM as one of the most widely used DNA read mapping programs. 
 
-Below are the research questions we defined in the thesis, and the answers we can provide.
+Below are the research questions we defined in the thesis and the answers we can provide.
 
 \begin{itemize}
 	\item How can we accelerate DNA alignment in an already existing program?
@@ -28,9 +28,9 @@ There are various reasons explaining the difference between achieved and maximum
 	\item How close can the results with a different computing method be to the original software?
 \end{itemize}
 
-Since the output is text-based, we compared them by logging them to text and using the \verb|diff| UNIX utility. For each sequence, the main alignment is reported, along with secondary scores that are not always listed in the same order, and can slightly differ because of the ``seed-only" paradigm.
+Since the output is text-based, we compared them by logging them to text and using the \verb|diff| UNIX utility. For each sequence, the main alignment is reported, along with secondary scores that are not always listed in the same order and can slightly differ because of the ``seed-only" paradigm.
 
-When comparing the complete results from the SRR150 data set, we found a 11.23\% difference. This is a higher bound that includes non similar secondary score order. This information is usually not important in downstream analysis. This is why we also compared only using the main alignment, and also discarding the low quality scores (lower than 20). In this last case, the difference drops to 1.82\%, so the two outputs are very similar. We concluded that our solution produces acceptable results.
+When comparing the complete results from the SRR150 data set, we found a 11.23\% difference. This is a higher bound that includes non similar secondary score order. This information is usually not important in downstream analysis. This is why we also compared only using the main alignment and also discarding the low quality scores (lower than 20). In this last case, the difference drops to 1.82\%, so the two outputs are very similar. We concluded that our solution produces acceptable results.
 
 \begin{itemize}
 	\item How to ensure that the GPU resources are well used, while leaving more space if needed for future evolution?
