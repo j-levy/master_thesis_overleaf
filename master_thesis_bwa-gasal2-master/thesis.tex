@@ -40,6 +40,18 @@
 \usepackage{algpseudocode}
 \usepackage{array}
 
+\newcommand{\warn}[1]{{\huge \color{red} \bfseries {#1} }}
+% Note: these commands allow to write "commits" easily and in a readable manner. For final delivery, all you need it to remove the internals of the macro, so that all "commits" will be replaced by blanks.
+\definecolor{Brown}{rgb}{0.4,0.1,0.2}
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Green}{rgb}{0,1,0}
+
+\newcommand{\commitalt}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Red}{\textcolor{white}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Red}{\textcolor{white}{#3}}}\end{minipage}}
+
+\newcommand{\commit}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Green}{\textcolor{black}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Green}{\textcolor{black}{#3}}}\end{minipage}}
+
+\newcommand{\commitread}[3]{\begin{minipage}{\textwidth}\bfseries\colorbox{Brown}{\textcolor{white}{#1}}\colorbox{blue}{\textcolor{white}{#2}}\newline\parbox{0.45\textwidth}{\colorbox{Brown}{\textcolor{white}{#3}}}\end{minipage}}
+
 
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
@@ -249,6 +261,9 @@
 \section{The alignment problem}
 \input{003-alignment-problem}
 
+\section{Research questions}
+\input{003-research-questions}
+
 \section{Thesis overview}
 \input{004-thesis-overview}
 
@@ -257,23 +272,22 @@
 \section{Seed-and-extend mappers}
 \input{101-background}
 
-\section{Seed-extension}
-\input{102-existing-work}
+\section{The DNA mapper BWA-MEM}
+\input{102-bwa-mem}
 
+\section{DNA read mapping on GPU}
 \input{103-gpu-acceleration}
 
-\section{Research questions}
-\input{003-research-questions}
 
 \chapter{Accelerator design}
 \label{chap:accel}
 \input{200-accelerator-design}
 
 \section{Shortcomings of BWA}
-\input{202-computational-bottlenecks} %% profiling and stuff
+\input{201-computational-bottlenecks} %% profiling and stuff
 
 \section{GASAL2 and the extension kernel}
-\input{201-gasal2-and-kernel}	
+\input{202-gasal2-and-kernel}	
 
 \section{Proposed CUDA kernel}
 \input{203-proposed-kernel}
@@ -307,8 +321,8 @@
 \section{Correctness measurement}
 \input{403-correctness}
 
-\section{Memory use measurement}
-\input{404-memory-use}
+\section{Resources use}
+\input{404-resources-use}
 
 \chapter{Conclusions and recommendations}
 \label{chap:ccl}

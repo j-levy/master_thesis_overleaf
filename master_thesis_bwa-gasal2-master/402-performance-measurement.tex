@@ -1,8 +1,8 @@
-We will measure now the execution time of our solution, that we called \textbf{bwa-gasal2}, and compare it to the mainline version of BWA. For all this section, bwa-gasal2 processes sequences in batches of 1000, which gives between 10 000 and 100 000 chains to process for each batch.
+We will measure now the execution time of our solution, that we called \textbf{bwa-gasal2}, and compare it to the mainline version of BWA-MEM version 0.7.17~\cite{lh3:bwa}, the latest release at the time of writing. For all this section, bwa-gasal2 processes sequences in batches of 1000, which gives between 10 000 and 100 000 seeds to process for each batch.
 
 \subsection{Data set SRR150}
 
-For the first data set, full program execution times are given on Figure~\ref{fig:total-exec-time-srr150} and kernel speed-ups against BWA on Figure~\ref{fig:total-exec-speed-up-srr150}. We can notice that the global speed-up fluctuates quite a lot when using different threads, but no trend can be inferred. This may be due to our testing conditions or simply due to the nature of the data set, the results may present uneven behaviour depending on how data is split between threads. As we will see later on, the global speed-up profile with respect to the number of threads has a more consistent trend with the second data set.
+For the first data set, full program execution times are given in Figure~\ref{fig:total-exec-time-srr150} and kernel speed-ups against BWA-MEM in Figure~\ref{fig:total-exec-speed-up-srr150}. We can notice that the global speed-up fluctuates quite a lot when using different threads, but no trend can be inferred. This may be due to our testing conditions or simply due to the nature of the data set, the results may present uneven behaviour depending on how data is split between threads. As we will see later on, the global speed-up profile with respect to the number of threads has a more consistent trend with the second data set.
 
 \begin{figure}[p]
 	\centering
@@ -25,11 +25,11 @@ For the first data set, full program execution times are given on Figure~\ref{fi
 
 We obtain the most important speed-up using a single thread, reaching 1.35$\times$ the original program speed. This is promising, but is hardly a good indicator: in fact, these kind of program are usually run with multiple threads, and as we mentioned on Chapter~\ref{chap:accel}, a single thread running the accelerator is far from sufficient to saturate the GPU computing resources.
 
-In the case of 12 threads, we reach a GPU occupation of around 95\%, which is what could be expected of a GPU-accelerated program fully using the available computing resources. Here, the total speed-up almost reaches 1.28$\times$. It is substantially below our theoretical maximum of 1.37$\times$, but it is still an important acceleration. Many factors can participate in making this difference. In particular, memory filling for the batches requires a significant amount of time on the CPU side, in addition to the memory copies from host to device. In this case, we started with an already large memory allocation, to avoid any overhead caused by new allocations.
+In the case of 12 threads, we reach a GPU utilization 95\%, which is what could be expected of a GPU-accelerated program fully using the available computing resources. Here, the total speed-up almost reaches 1.28$\times$. It is below our theoretical maximum of 1.37$\times$, but it is still an important acceleration. Many factors can participate in making this difference. In particular, memory filling for the batches requires a significant amount of time on the CPU side, in addition to the memory copies from host to device. In this case, we started with an already large memory allocation, to avoid any overhead caused by new allocations.
 
 In all cases, the difference between one and two streams is striking, with the speed-up even leaping from 1.21$\times$ to 1.28$\times$ in the 12 threads case.
 
-When isolating the kernel times and kernel speed-up, we get the measurements shown respectively on Figure~\ref{fig:kernel-exec-time-srr150} and Figure~\ref{fig:kernel-exec-speed-up-srr150}. It is important to notice that what is reported as "kernel time" for the 2-stream variant represents only the time during which the CPU is actively waiting for the GPU results. In other words, we have hidden-time execution disabled when using one stream, and enabled with 2 streams. We call this "visible kernel execution time".
+When isolating the kernel times and kernel speed-up, we get the measurements shown respectively on Figure~\ref{fig:kernel-exec-time-srr150} and Figure~\ref{fig:kernel-exec-speed-up-srr150}. It is important to notice that what is reported as "kernel time" for the 2-stream variant represents only the time during which the CPU is actively waiting for the GPU results. In other words, we have disabled overlapped execution when using one stream, and enabled with 2 streams. We call this "visible kernel execution time".
 
 
 \begin{figure}[p]
@@ -51,12 +51,12 @@ When isolating the kernel times and kernel speed-up, we get the measurements sho
 	%\label{fig:}
 \end{figure}
 
-With hidden-time execution, on the 2-stream version, the visible kernel time is an order of magnitude shorter. In this special case, the kernel times were hugely different, so we had to display them in log scale. But while the visible sped-up reaches 4.7$\times$ on single streams with 12 threads, it jumps to almost 16$\times$, effectively shrinking down the visible compute time of the extension by the same amount. Although it is not useful in real-life, single-thread results are even more impressive, with a visible kernel speed-up reaching 40$\times$ with hidden-time, and only 6$\times$ when actively waiting for the result.
+With overlapped execution, in the 2-stream version, the visible kernel time is an order of magnitude shorter. In this special case, the kernel times were hugely different, so we had to display them in log scale. But while the speed-up reaches 4.7$\times$ in single streams with 12 threads, it jumps to almost 16$\times$, effectively shrinking down the compute time of the extension by the same amount. Single-thread results are even more impressive, with a  kernel speed-up reaching 40$\times$ with overlapping, and only 6$\times$ when actively waiting for the result.
 
 
 \subsection{Data set SRR250}
 
-We run the same measurements on data set SRR250. Its sequences are longer, so they take quite a substantial amount of time to complete. Execution times and overall speed-up are shown on Figure~\ref{fig:total-exec-time-srr250} and Figure~\ref{fig:total-exec-speed-up-srr250} respectively.
+We run the same measurements on data set SRR250. Its reads are longer, so they take quite a substantial amount of time to complete. Execution times and overall speed-up are shown in Figure~\ref{fig:total-exec-time-srr250} and Figure~\ref{fig:total-exec-speed-up-srr250}, respectively.
 
 
 \begin{figure}[p]
@@ -78,7 +78,7 @@ We run the same measurements on data set SRR250. Its sequences are longer, so th
 	%\label{fig:}
 \end{figure}
 
-For this data set, the extension time is taking approximately 33\% of the total time, so we would expect a bigger speed-up, with the theoretical maximum being 1.5$\times$. However, it is not what we observe, even in the best case with 2 streams: on a single thread, we can effectively reach a speed-up of 1.41$\times$, which gets somewhat close to the theoretical maximum, but with 12 threads, we reach only 1.29$\times$. This is still a valuable improvement over the original version, and in all cases, hidden-time execution gives a substantial boost in performance. When comparing the single stream version to its 2-stream counterpart, we note that using 2 streams definitely helps shrinking the execution time.
+For this data set, the extension time is taking approximately 33\% of the total time, so we would expect a bigger speed-up, with the theoretical maximum being 1.5$\times$. With 2 streams and single thread, we can effectively reach a speed-up of 1.41$\times$, which gets somewhat close to the theoretical maximum. With 12 threads, the speed-up is 1.29$\times$. This is still a valuable improvement over the original version, and in all cases, overlapped execution gives a substantial boost in performance. When comparing the single stream version to its 2-stream counterpart, we note that using 2 streams definitely helps shrinking the execution time.
 
 We will now examine the kernel times and speed-up, on Figure~\ref{fig:kernel-exec-time-srr250} and Figure~\ref{fig:kernel-exec-speed-up-srr250} respectively.
 
@@ -102,7 +102,7 @@ We will now examine the kernel times and speed-up, on Figure~\ref{fig:kernel-exe
 	%\label{fig:}
 \end{figure}
 
-Kernel running times for BWA (running on CPU) are steady. As the number of threads increases, we get closer to a plateau as the execution time hardly gets any lower for all programs. Again, we can remark how hidden-time execution helps in computing it faster with two streams. The difference is tremendously high for one thread, with time the CPU waiting for the GPU to complete being 5 times lower with 2 streams (from 1125s with 1 stream to 197s), but the benefits are not as high when using 12 threads, with the kernel waiting time being only 2.5 lower for the 2-stream version (from 250s for 1 stream to 89s for 2 streams). When using multiple threads, the overhead caused by filling a lot of GPU batches then copying them to the device is more important. It is all the more the case when using twice as many streams, having twice as many structures needing filling and being copied to the device.
+Kernel running times for BWA-MEM (running on CPU) are steady. As the number of threads increases, we get closer to a plateau as the execution time hardly gets any lower for all programs. Again, we can remark how overlapped execution helps in computing it faster with two streams. The difference is tremendously high for one thread, with the CPU waiting time for the GPU to complete being 5 times lower with 2 streams (from 1125s with 1 stream to 197s). When using 12 threads, with the kernel waiting time is  2.5 lower for the 2-stream version (from 250s for 1 stream to 89s for 2 streams). When using multiple threads, the overhead caused by filling a lot of GPU batches and copying them to the device is substantial. It is all the more the case when using twice as many streams, having twice as many structures needing filling and being copied to the device.
 
 We can also see whether increasing the number of streams could give any performance improvement. Results are shown on Figure~\ref{fig:exec-time-nbstreams}. As we can see, using more than 2 streams does not provide in any improvement. 
 

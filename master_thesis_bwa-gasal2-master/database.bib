@@ -332,5 +332,136 @@
 	OPTurldate = {2015},
 }
 
+@online{ncbi:homo,
+	ALTauthor = {National Center for Biotechnology Information},
+	title = {Homo Sapiens},
+	date = {2019},
+	url = {https://www.ncbi.nlm.nih.gov/genome?term=txid9606\%5Borgn\%5D},
+}
+
+@online{ncbi:cat,
+	ALTauthor = {National Center for Biotechnology Information},
+	title = {Felis Catus (domestic cat)},
+	date = {2019},
+	url = {https://www.ncbi.nlm.nih.gov/genome/78?genome_assembly_id=356698},
+}
+
+
+@online{ncbi:dog,
+	ALTauthor = {National Center for Biotechnology Information},
+	title = {Canis lupus familiaris (dog)},
+	date = {2019},
+	url = {https://www.ncbi.nlm.nih.gov/genome?term=canis\%20lupus\%20familiaris},
+}
+
+@misc{referencegenome,
+	title = {E pluribus unum},
+	date = {2010},
+	author = {Nature Methods },
+	OPTurl = {https://doi.org/10.1038\%2Fnmeth0510-331},
+	doi = {10.1038\%2Fnmeth0510-331}
+}
+
+@INPROCEEDINGS{Chang:SMEM,
+author={M. F. {Chang} and Y. {Chen} and J. {Cong} and P. {Huang} and C. {Kuo} and C. H. {Yu}},
+booktitle={2016 IEEE 24th Annual International Symposium on Field-Programmable Custom Computing Machines (FCCM)},
+title={The SMEM Seeding Acceleration for DNA Sequence Alignment},
+year={2016},
+volume={},
+number={},
+pages={32-39},
+keywords={biocomputing;DRAM chips;field programmable gate arrays;genomics;hardware-software codesign;SMEM seeding acceleration;DNA sequence alignment;next-generation sequencing technology;genome sequencing;supermaximal exact match seeding algorithm;long random memory access;scalable array-based architecture;software-hardware integration;Intel-Altera HARP system;16-PE accelerator engine;DRAM access;Genomics;Bioinformatics;Acceleration;Arrays;Sequential analysis;Field programmable gate arrays;FPGA;BWA-MEM;read alignment;Supermaximal exact match;PE-array architecture;Intel HARP},
+doi={10.1109/FCCM.2016.21},
+ISSN={}
+}
+
+@Article{li:smem,
+author={Li, Heng},
+title={Exploring single-sample SNP and INDEL calling with whole-genome de novo assembly},
+journal={Bioinformatics (Oxford, England)},
+year={2012},
+month={Jul},
+day={15},
+publisher={Oxford University Press},
+volume={28},
+number={14},
+pages={1838-1844},
+keywords={Algorithms},
+keywords={Computational Biology/*methods},
+keywords={Humans},
+keywords={*INDEL Mutation},
+keywords={*Polymorphism, Single Nucleotide},
+keywords={Sequence Analysis, DNA/*methods},
+abstract={MOTIVATION: Eugene Myers in his string graph paper suggested that in a string graph or equivalently a unitig graph, any path spells a valid assembly. As a string/unitig graph also encodes every valid assembly of reads, such a graph, provided that it can be constructed correctly, is in fact a lossless representation of reads. In principle, every analysis based on whole-genome shotgun sequencing (WGS) data, such as SNP and insertion/deletion (INDEL) calling, can also be achieved with unitigs. RESULTS: To explore the feasibility of using de novo assembly in the context of resequencing, we developed a de novo assembler, fermi, that assembles Illumina short reads into unitigs while preserving most of information of the input reads. SNPs and INDELs can be called by mapping the unitigs against a reference genome. By applying the method on 35-fold human resequencing data, we showed that in comparison to the standard pipeline, our approach yields similar accuracy for SNP calling and better results for INDEL calling. It has higher sensitivity than other de novo assembly based methods for variant calling. Our work suggests that variant calling with de novo assembly can be a beneficial complement to the standard variant calling pipeline for whole-genome resequencing. In the methodological aspects, we propose FMD-index for forward-backward extension of DNA sequences, a fast algorithm for finding all super-maximal exact matches and one-pass construction of unitigs from an FMD-index. AVAILABILITY: http://github.com/lh3/fermi},
+note={22569178[pmid]},
+note={PMC3389770[pmcid]},
+note={bts280[PII]},
+issn={1367-4811},
+doi={10.1093/bioinformatics/bts280},
+url={https://www.ncbi.nlm.nih.gov/pubmed/22569178}
+}
+
+@online{ncbi:srr150,
+	ALTauthor = {National Center for Biotechnology Information},
+	title = {GIAB: ILLUMINA_SRP011558_MiSeq_SRR473302-SRR473304(SRR949537) },
+	date = {2013},
+	url = {https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR949537},
+}
+
+@online{ncbi:srr250,
+	ALTauthor = {National Center for Biotechnology Information},
+	title = {Illumina whole genome shotgun sequencing of genomic DNA paired-end library 'Solexa-127365' containing sample 'GM12878'},
+	date = {2019},
+	url = {https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR835433},
+}
+
+@online{illumina:sbs,
+	ALTauthor = {Illumina},
+	title = {Sequencing by Synthesis (SBS) Technology},
+	date = {2019},
+	url = {https://www.illumina.com/science/technology/next-generation-sequencing/sequencing-technology.html}
+},
+
+@online{bitesizebio:sbs,
+	ALTauthor = {BiteSizeBio},
+	title = {Sequencing-by-Synthesis: Explaining the Illumina Sequencing Technology},
+	date = {2019},
+	url = {https://bitesizebio.com/13546/sequencing-by-synthesis-explaining-the-illumina-sequencing-technology/},
+},
+
+
+@misc{poster:bwa,
+	title = {Aligning sequence reads, clone sequences and assembly contig with BWA-MEM},
+	date = {2013},
+	author = {Heng Li},
+	OPTurl = {https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/1421612/memposter.pdf},
+	OPTurldate = {2013},
+}
+
+@article{li:bwamem,
+author = {Li, Heng},
+year = {2013},
+month = {03},
+pages = {},
+title = {Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM},
+volume = {1303},
+journal = {ArXiv}
+},
+
+@online{wiki:DNA,
+	title = {DNA},
+	author = {The Free Encyclopedia, Wikipedia},
+	date = {2019},
+	url = {https://en.wikipedia.org/wiki/DNA},
+},
+
+@online{misc:diseases,
+	title = {Specific Genetic Disorders},
+	%author = {The Free Encyclopedia, Wikipedia},
+	date = {2018},
+	url = {https://www.genome.gov/For-Patients-and-Families/Genetic-Disorders},
+},
+
+
 
 % MOAR references, google Nauman & EJ HOUTHAST
