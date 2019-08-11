@@ -45,14 +45,14 @@ With all of this implemented, the pseudocode for the kernel is shown in Algorith
 		
 		%\State \emph{compute S matrix}
 		\For {$target\_tile\_id$ from $0$ to $(target\_batch\_regs-1)$}
-			\State $gpac \leftarrow$ Fetch a pack of 8 bases from $target\_string$ at position $target\_tile\_id$ (int32)
+		\State $gpac \leftarrow$ Fetch a pack of 8 bases from $target\_string$ at position $target\_tile\_id$ (int32)
 		
 		\For {$target\_base\_id$ from $0$ to $TILE\_SIDE-1$}
 		\State $i = target\_tile\_id * TILE\_SIDE + target\_base_i$
 		
-				\State $target\_base_j \leftarrow $ read base in $gpac$ at position $target\_base\_id$ 
-				\State Compute first column of the matrix
-				
+		\State $target\_base_j \leftarrow $ read base in $gpac$ at position $target\_base\_id$ 
+		\State Compute first column of the matrix
+		
 		\For {$query\_tile\_id$ from $0$ to $(query\_batch\_regs-1)$}
 		\State $rpac \leftarrow$ Fetch a pack of 8 bases from $query\_string$ at position $query\_tile\_id$ (int32)
 		
@@ -60,30 +60,30 @@ With all of this implemented, the pseudocode for the kernel is shown in Algorith
 		\State $query\_base_j \leftarrow $ read base in $rpac$ at position $query\_base\_id$ 
 		
 		\State $j = query\_tile\_id * TILE\_SIDE + query\_base_j$
-
+		
 		\If{$i < beg$}
-			\State continue
+		\State continue
 		\EndIf
 		\If{$i >= end$}
-			\State break
+		\State break
 		\EndIf
-
+		
 		\State Compute $S[i,j]$, $G_{A}[i,j]$ and $G_{B}[i,j]$
-
+		
 		% S = H (dans le C), G_A = E (dans le C), G_B = F (dans le C)
 		
 		\EndFor %query base
 		\EndFor %query tile
 		%% Zdrop
 		\If{$j == query\_length$}
-			\State Store global score and global end position
+		\State Store global score and global end position
 		\EndIf
 		\If{maximum calculated score > previous maximum}
-			\State Store new maximum score and new end position ($max\_query, max\_target$)
-		\ElsIf{$zdrop > 0$}}
-			\If{the current score dropped more than $zdrop$ since the last maximum score}
-				\State break
-			\EndIf
+		\State Store new maximum score and new end position ($max\_query, max\_target$)
+		\ElsIf{$zdrop > 0$}
+		\If{the current score dropped more than $zdrop$ since the last maximum score}
+		\State break
+		\EndIf
 		\EndIf
 		
 		%% cell-skipping
