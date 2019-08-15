@@ -11,7 +11,7 @@ When we have a read and a segment of the reference with a corresponding seed, we
 BWA-MEM operates in three major steps~\cite{li:bwamem}: seeding, chaining, and seed-extension. We will detail these three phases.
 
 \subsection{Seeding}
-\emph{Seeding} consists in finding small areas that exactly match between the read and the reference. This search is done with an FM-index.
+\emph{Seeding} consists in finding small areas in the read that exactly match in the reference. This search is done with an FM-index.
 
 The FM-index is a compressed representation for the reference genome. It is widely used due to its lightweight memory footprint, which is sub-linear with respect to the size of the data. Searching for a pattern in the compressed text is also sub-linear in time, which makes it ideal for seeding. When a seed is located, a chunk is taken from the genome around the seed to perform the alignment with the query sequence. This chunk should be larger than the query with which it shares a seed, since there could be gaps in the alignment. More details are available online~\cite{wiki:FMIndex}, but the following work does not rely on how FM-index works. 
 
