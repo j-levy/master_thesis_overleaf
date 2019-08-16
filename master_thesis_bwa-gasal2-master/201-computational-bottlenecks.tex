@@ -6,9 +6,9 @@ We will first introduce how the time taken by some crucial parts in BWA-MEM make
 
 \subsection{BWA-MEM computational parts}
 
-BWA-MEM is a full-featured DNA read mapper based on seed-and-extend. In Chapter 2 we described various processing steps of the mapper. It performs a lot of steps to align a batch of query sequences against a reference genome. The seed-extension part that can be accelerated with GASAL2 represents a considerable amount of fraction of the total time.
+BWA-MEM is a full-featured DNA read mapper based on seed-and-extend. In Chapter~\ref{chap:background} we described the processing steps of the mapper. It performs a lot of steps to align a batch of query sequences against a reference genome. The seed-extension part that can be accelerated with GASAL2 represents a considerable fraction of the total time.
 
-We profiled the mapper, by mapping paired-end reads to the the human reference genome "hg19"~\cite{ncbi:hg19}. The read data set consists of two files with 5.2 million sequences each, all of them being 150 bases long. The read data set is SRR949537~\cite{ncbi:srr150} downloaded from Sequence Read Archive. We used 12 threads on our test machine, which will be presented later in Chapter~\ref{chap:measurements}. We reported the time needed for the execution of each thread, then took the mean of all of them. The time share is visible on Figure~\ref{fig:bwatimedivision}. We can see that the extension takes approximately 27\% of the total time. Depending on the data set, this can go from 25\% to 33\%. This makes the extension an interesting part to accelerate, since it takes an reasonable fraction of the total compute time. The measurements also show that a theoretical speed-up of $1/\left(1 - 0.27\right) = 1.37\times$ can be reached by accelerating seed-extension.
+We profiled the mapper by mapping paired-end reads to the the human reference genome "hg19"~\cite{ncbi:hg19}. The read data set consists of two files containing pair-end reads with 5.2 million sequences each, all of them being 150 bases long. The read data set is SRR949537~\cite{ncbi:srr150} downloaded from Sequence Read Archive. We used 12 threads on our test machine, which will be presented later in Chapter~\ref{chap:measurements}. We reported the time needed for the execution of each thread, then took the mean of all of them. The time share is visible in Figure~\ref{fig:bwatimedivision}. We can see that the extension takes approximately 27\% of the total time. Depending on the data set, this can go from 25\% to 33\%. This makes the extension an interesting part to accelerate, since it takes an reasonable fraction of the total compute time. The measurements also show that a theoretical speed-up of $1/\left(1 - 0.27\right) = 1.37\times$ can be reached by accelerating seed-extension.
 
 \begin{figure}[h!]
 	\centering
@@ -89,7 +89,7 @@ Although this may seem as an easy way to split the code, it grew up to the point
 
 In addition, a shift to C++ has been operated to take advantage of C++ templates: they allow to produce different versions of a given function at compilation time. This will me more discussed on Chapter~\ref{chap:implementation}.
 
-%We can draw an inclusion graph of all the files in GASAL2 in its current form. This graph is shown on Figure~\ref{fig:inclgraph}.
+%We can draw an inclusion graph of all the files in GASAL2 in its current form. This graph is shown in Figure~\ref{fig:inclgraph}.
 
 %\commit{Jonathan}{\today}{ADD GRAPH HERE}
 

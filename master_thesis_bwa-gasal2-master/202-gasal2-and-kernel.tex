@@ -3,7 +3,7 @@ More details will be given in the workflow of GASAL2 and its distinctive feature
 
 \subsection{Typical workflow of GASAL2}
 
-We will now describe the workflow usually followed when using GASAL2. Figure~\ref{fig:dataflow} shows this flow in a graph. This flow can be instantiated multiple times from each CPU threads.
+We will now describe the workflow usually followed when using GASAL2. Figure~\ref{fig:dataflow} shows the processing flow in a graph. This flow can be instantiated multiple times from each CPU thread.
 
 The first step is to fill the parameters used for alignment: match and mismatch scores, maximum number of sequences and maximum sizes. Then the GPU and host storages are initialised with this given size. Data sizes are specified in advance, so the initialisation takes an important amount of VRAM.
 
@@ -71,7 +71,7 @@ The kernel launch has adaptable parameters to tune it for a given data set, numb
 	\item the alignment kernel (be it local, global, or else)
 \end{itemize}
 
-The packing and the reverse/complement kernels are very fast due to having very few computation, and take almost no time to complete compared to the alignment kernel. With various data sets, it has been measured that the packing kernel takes at most 0.6\% of the kernels run times, and the reverse/complement kernel takes at most 4\% of the kernels run times when all sequences must be both reversed and complemented, and data transfer time take at most 4\% of the total time. Note that these times are given here as a rough estimate to show the importance of some tasks compared to others, and that precise measurements are presented on Chapter~\ref{chap:measurements}. As expected, the large majority of the time is taken by the alignment kernel.
+The packing and the reverse/complement kernels are very fast due to having very few computation, and take almost no time to complete compared to the alignment kernel. With various data sets, it has been measured that the packing kernel takes at most 0.6\% of the kernels run time, and the reverse/complement kernel takes at most 4\% of the kernels run time when all sequences must be both reversed and complemented. Data transfer time take at most 4\% of the total time. Note that these times are given here as a rough estimate to show the importance of some tasks compared to others, and that precise measurements are presented on Chapter~\ref{chap:measurements}. As expected, the large majority of the time is taken by the alignment kernel.
 
 The alignment kernel has a variable GPU occupation depending on the data processed. On our test machine, with a single CPU thread, the SM utilisation oscillates between 3\% and 10\%. Even though it seems a very low occupation, it is not a major problem since the kernels are compute bound and higher occupancy does not necessarily increase the performance.
 %% http://developer.download.nvidia.com/compute/DCGM/docs/nvidia-smi-367.38.pdf
@@ -85,11 +85,11 @@ The original extension function has a BLAST-like seed-extension behaviour. It st
 \begin{itemize}
 	\item it isolates the left part of both sequences, and reverse them.
 	\item it computes a local alignment with the beginning score equal to the seed score. The end position of this alignment is equal to the beginning of the alignment of the two sequences (the alignment progresses from right to left, since the left parts have been reversed)
-	\item it then isolates the right part of both sequences,
+	\item then it isolates the right part of both sequences,
 	\item it computes a local alignment with the start score equal to the left score previously computed (which includes the seed score).
 \end{itemize}
 
-In our case, this approach is unpractical because one would like to compute both sides in parallel to maximise GPU usage. In this fashion, we do not have other choices than making both extensions (left and right) start with a score equal to the seed score, which could make a small difference in the final result. We expected this error between the regular BLAST-like computation and our slightly different approach to be small enough to consider this approach valid. We effectively measured it after implementation, with results shown in Chapter~\ref{chap:measurements} and we reached the conclusion that the difference was effectively very small and that calculating both sides at the same time only using the seed score is an acceptable way to solve this problem. We call that paradigm the "seed-only" method.
+In our case, this approach is unpractical because we would like to compute both sides in parallel to maximise GPU usage. In this fashion, we do not have other choices than making both extensions (left and right) start with a score equal to the seed score, which could make a small difference in the final result. We expected this error between the regular BLAST-like computation and our slightly different approach to be small enough to consider this approach valid. We measured it after implementation, with results shown in Chapter~\ref{chap:measurements} and we reached the conclusion that the difference was effectively very small and that calculating both sides at the same time only using the seed score is an acceptable way to solve this problem. We call that paradigm the "seed-only" method.
 
 Another problem comes from the rigidity of GASAL2 memory scheme. Originally, GASAL2 was not able to scale in memory and adapt if some sequences were longer than expected, resulting in a crash of the program. This is particularly problematic when integrating it in BWA-MEM, because the number of seeds is unknown in advance, so each batch in GASAL2 need to have a variable size; plus, left and right parts of the target and query sequences have an unpredictable length. An extensible data structure should be implemented to tackle this issue with minimum overhead.
 

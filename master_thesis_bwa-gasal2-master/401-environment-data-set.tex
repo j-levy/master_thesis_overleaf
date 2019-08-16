@@ -4,7 +4,7 @@ First we review the conditions in which we run our measurements.
 
 \subsection{Environment definition}
 
-The specifications of the machine used for the measurements is shown in Table~\ref{tbl:hwspecs}. We reported hardware references in Table~\ref{tbl:hwspecs} and software specifications on Table~\ref{tbl:swspecs}.
+The specifications of the machine used for the measurements is shown in Table~\ref{tbl:hwspecs}. We report hardware references in Table~\ref{tbl:hwspecs} and software specifications on Table~\ref{tbl:swspecs}.
 
 \begin{table}[h!]
 	\centering
@@ -51,11 +51,11 @@ The specifications of the machine used for the measurements is shown in Table~\r
 \label{tbl:swspecs}
 \end{table}
 
-We applied an optimisation level of -O2 for the GCC compiler since we noted that it gave significantly faster execution than -O0 and -O1. O3 optimisation level made no difference in speed with respect to -O2. For NVCC (the NVIDIA CUDA compiler) we kept the -O3 optimisation level that was originally used in all GASAL2 papers~\cite{Ahmed:gasal}.
+We apply an optimisation level of -O2 for the GCC compiler since we noted that it gave significantly faster execution than -O0 and -O1. O3 optimisation level makes no difference in speed with respect to -O2. For NVCC (the NVIDIA CUDA compiler) we keep the -O3 optimisation level that was originally used in all GASAL2 papers~\cite{Ahmed:gasal}.
 
-The row "NVCC compiler options" has two particular defines passed with -D. \verb|MAX_SEQ_LEN| corresponds the maximum size of the sequence for the extension kernel. As we have seen on Figure~\ref{fig:visualisation-aid-tile}, we have to store the score of a whole row (in yellow in the figure). This size is defined at compilation time to avoid dynamic memory allocation inside the kernel, which makes it noticeably faster. Having to define this number at compilation is not very problematic because we know that Illumina machines produce reads with fixed lengths. \verb|N_CODE| defines the value used for the unknown base "N", since each program can use its own. For example, the test program provided with GASAL2 registers the bases with their ASCII values, so the N code is \verb|0x4E|; but BWA-MEM codes A, C, T, G, and N with integer values from 0 to 4, the "N" code being 4.
+The row "NVCC compiler options" has two particular defines passed with -D. \verb|MAX_SEQ_LEN| corresponds the maximum size of the sequence for the extension kernel. As we have seen previously in Figure~\ref{fig:visualisation-aid-tile}, we have to store the score of a whole row (in yellow in the figure). This size is defined at compilation time to avoid dynamic memory allocation inside the kernel, which makes it noticeably faster. Having to define this number at compilation is not very problematic because we know that Illumina machines produce reads with fixed lengths. \verb|N_CODE| defines the value used for the unknown base "N", since each program can use its own. For example, the test program provided with GASAL2 registers the bases with their ASCII values, so the N code is \verb|0x4E|; but BWA-MEM codes A, C, T, G, and N with integer values from 0 to 4, the "N" code being 4.
 
-All tests are run with 1 and 2 streams, and with 1, 2, 4, 6, 8, 10, and 12 threads. We will observe how overlap execution provides faster results while using 2 streams. In addition, we run the program with only one stream to force it to wait for its completion before re-filling the data structure containing the query and target sequences to align: this allows to measure the actual kernel time, since the CPU is actively waiting for it. 
+All tests are run with 1 and 2 streams, and with 1, 2, 4, 6, 8, 10, and 12 threads. We will observe how overlapped execution provides faster results while using 2 streams. In addition, we run the program with only one stream to force it to wait for its completion before re-filling the data structure containing the query and target sequences to align: this allows to measure the actual kernel time, since the CPU is actively waiting for the kernel to complete. 
 
 \subsection{Data sets}
 

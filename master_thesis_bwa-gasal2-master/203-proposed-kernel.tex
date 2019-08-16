@@ -1,15 +1,15 @@
-Due to complexity of seed-extension acceleration on GPU described in the previous section, we would like to design a library interface with a kernel that complies with the following technical specifications:
+Due to the complexity of seed-extension acceleration on GPU described in the previous section, we would like to design a library interface with a kernel that complies with the following technical specifications:
 
 \begin{itemize}
 	\item The library should be able to start with any amount of memory and extend it whenever needed. Moreover, the memory allocations should remain as scarce as possible.
 	\item The kernel should reproduce the behaviour of BLAST-like kernels by allowing local DNA alignment with a non-zero starting score.
-	\item The interface on BWA-MEM side with the library should have similar behaviour as the original extension function, but using the seed-only approach explained in Section~\ref{sec:seedonly}, should not effect the final results of the extension.
-	\item The end product should be readily available as an open-source project, respectful of the original licenses, and with a complete traceback of the code production.
+	\item The interface on BWA-MEM side with the library should have similar behaviour as the original extension function, but using the seed-only approach explained in Section~\ref{sec:seedonly}, and the difference for the final results should be minimal.
+	\item The end product should be readily available as an open-source project, respectful of the original licenses, and with a complete traceback of code production.
 \end{itemize}
 
 With the above requirements, now we have to state the goals and metrics used to verify that the end product meets the specifications:
 \begin{itemize}
-	\item The integration of GASAL2 in BWA-MEM should effectively speed up the alignment process. We will compare the kernel execution times before and after acceleration  with and without hidden-time execution. We will also compare total execution times to verify the global speed-up.
+	\item The integration of GASAL2 in BWA-MEM should effectively speed up the alignment process. We will compare the kernel execution times before and after acceleration  with and without hidden time execution. We will also compare total execution times to verify the global speed-up.
 	
 	\item Using the seed-only paradigm should not bring any difference to the vast majority of the alignments. Still, there is no guarantee that the results will be exactly the same. Whenever the alignment differs, the difference with the original BLAST-like paradigm should be minimal. Result correctness will be examined. We will quantify the number of differences between the two results output from original BWA-MEM and its accelerated version, for our given data sets.
 	

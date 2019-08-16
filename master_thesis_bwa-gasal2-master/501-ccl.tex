@@ -1,6 +1,4 @@
-
-
-In this thesis, we addressed the challenge of accelerating time consuming genomics algorithms to make them more accessible for application in the field. The thesis specifically focuses on BWA-MEM as one of the most widely used DNA read mapping programs. 
+This work presents how we addressed the challenge of accelerating time consuming genomics algorithms to make them more accessible for application in the field. The thesis specifically focuses on BWA-MEM as one of the most widely used DNA read mapping programs.
 
 Below are the research questions we defined in the thesis and the answers we can provide.
 
@@ -8,9 +6,9 @@ Below are the research questions we defined in the thesis and the answers we can
 	\item How can we accelerate DNA alignment in an already existing program?
 \end{itemize}	
 
-We chose an industry standard mapper, BWA-MEM, and we accelerated one of its processing stages. The "seed-extension" phase can be run in a accelerated on a dedicated hardware, the GPU. We integrated the library GASAL2 in BWA-MEM to realise the acceleration. Still, we could not directly compute seed-extension as done in original BWA-MEM. In BWA-MEM, the left and right parts were computed one after the other, and starting with the previous total score (so, first the seed score is used to compute the left part, then the score from the left alignment is used for the right part). Instead, we compute both parts at the same time only using the seed score as starting score.
+We chose an industry standard mapper, BWA-MEM, and we accelerated one of its processing stages. The "seed-extension" phase can be run in an accelerated fashion on a dedicated hardware, the GPU. We integrated the library GASAL2 in BWA-MEM to realise the acceleration. Still, we could not directly compute seed-extension as done in the original BWA-MEM: the left and right parts were computed one after the other, and starting with the previous total score (so, first the seed score is used to compute the left part, then the score from the left alignment is used for the right part). Instead, we compute both parts at the same time only using the seed score as starting score.
 
-To produce a working piece of software, we had to implement multiple improvements in GASAL2. We created a dedicated kernel for extension, copying BWA-MEM behaviour that follows the Smith-Waterman algorithm, but able to start with any given starting score. We also needed to implement an extensible memory structure for GASAL2 to adapt to an unknown number of alignment with unpredictable lengths for each of them. Finally, we instrumented both the new version bwa-gasal2 and BWA-MEM to be able to log their execution time and compare them. 
+To produce a working piece of software, we had to implement multiple improvements in GASAL2. We created a dedicated kernel for extension, copying BWA-MEM behaviour that follows the Smith-Waterman algorithm, but able to start with any given starting score. We also implemented an extensible memory structure for GASAL2 to adapt to an unknown number of alignment with unpredictable lengths for each of them. Finally, we instrumented both the new version bwa-gasal2 and the original BWA-MEM to be able to log their execution time and compare them. 
 
 We started from the demonstrator GASE-GASAL2 (based on BWA-MEM) that we ported to support C++ compilation before integrating the new GASAL2 version. It features templates for generic functions and a parameters class. We implemented all the aforementioned features to produce the current version of the software, \textbf{bwa-gasal2}.
 
@@ -18,9 +16,9 @@ We started from the demonstrator GASE-GASAL2 (based on BWA-MEM) that we ported t
 	\item How much speed-up can we get from GPU acceleration?
 \end{itemize}
 
-We ran our solution on two data sets, with reads of 150 and 250 bases, named SRR150 and SRR250 respectively. Depending on the data, inn BWA-MEM, extension takes between 27\% and 33\% of the total time. This means that, depending on the situation, we can reach a theoretical 1.37$\times$ and 1.50$\times$ speed-up.
+We ran our solution on two data sets, with reads of 150 and 250 bases, named SRR150 and SRR250 respectively. Depending on the data, in BWA-MEM, extension takes between 27\% and 33\% of the total time. This means that, depending on the situation, we can reach a theoretical 1.37$\times$ and 1.50$\times$ speed-up.
 
-We saw that on our test machine, parallel execution alone can provide an already interesting speed-up. On 12 threads in SRR150, we reach 1.21$\times$ speed-up. But when enabling overlap execution with two CUDA streams, we can get a 1.28$\times$ speed-up, which gets closer to the theoretical maximum of 1.37$\times$. This is all the more visible with data set SRR250 where the speed-up soars from 1.12$\times$ to 1.28$\times$. We obtained a very good acceleration, close to the theoretical maximum. 
+We saw that on our test machine, parallel execution alone can provide an already interesting speed-up. On 12 threads in SRR150, we reach 1.21$\times$ speed-up. But when enabling overlapped execution with two CUDA streams, we can get a 1.28$\times$ speed-up, which gets closer to the theoretical maximum of 1.37$\times$. This is all the more visible with data set SRR250 where the speed-up soars from 1.12$\times$ to 1.28$\times$. We obtained a very good acceleration, close to the theoretical maximum. 
 
 There are various reasons explaining the difference between achieved and maximum speedup. First, the CPU has to wait to get the final result of a given pack of sequences (it cannot start the next pack right away). Moreover, some overhead is introduced when filling the data structure in GASAL2 on the host side, before copying them on the device.
 
@@ -36,7 +34,7 @@ When comparing the complete results from the SRR150 data set, we found a 11.23\%
 	\item How to ensure that the GPU resources are well used, while leaving more space if needed for future evolution?
 \end{itemize}
 
-A GPU is well used when its computing resources have a high utilisation. Although a single kernel execution from GASAL2 has a low utilisation (between 8\% to 15\%), instantiating multiple CPU threads to launch more kernels at the same time allows us to multiply this utilisation in a direct fashion. This way, we can reach 70\% with peaks at 90\% of utilisation, which is a good use of resources.
+A GPU is well used when its computing resources have a high utilisation. Although a single kernel execution from GASAL2 has a low utilisation (between 3\% to 10\%), instantiating multiple CPU threads to launch more kernels at the same time allows us to multiply this utilisation in a direct fashion. This way, we can reach 70\% with peaks at 90\% of utilisation, which is a good use of resources.
 
 On the contrary, a sane use of GPU VRAM would be not to use more memory than what is necessary. Being frugal in memory can be useful if we want to align longer sequences, as these take a lot of space. Also, it can prevent out-of-memory errors if other parts were accelerated, or simply it could allow the program to run on a moderately-sized accelerator. To this extent, we used extensible memory structures to store the DNA strings, with a linked list structure with elements growing in size. This allows to allocate more memory whenever needed, and since the linked list is re-used, we try to keep the number of memory allocations to the minimum. With this, we could use around 20\% of the total memory of our accelerator for data set SRR150, or around 30\% for SRR250. 
 
